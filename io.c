@@ -4132,6 +4132,10 @@ rb_io_modestr_fmode(const char *modestr)
   finished:
     if ((fmode & FMODE_BINMODE) && (fmode & FMODE_TEXTMODE))
         goto error;
+#ifdef _WIN32
+    if (!(fmode & FMODE_BINMODE) && !(fmode & FMODE_TEXTMODE))
+	fmode |= FMODE_BINMODE;
+#endif
     if (p && io_encname_bom_p(p, 0))
 	fmode |= FMODE_SETENC_BY_BOM;
 
@@ -6382,7 +6386,8 @@ prep_io(int fd, int fmode, VALUE klass, const char *path)
 
     MakeOpenFile(io, fp);
     fp->fd = fd;
-#ifdef __CYGWIN__
+//#ifdef __CYGWIN__
+#ifdef _WIN32
     if (!isatty(fd)) {
         fmode |= FMODE_BINMODE;
 	setmode(fd, O_BINARY);

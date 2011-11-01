@@ -2132,6 +2132,8 @@ init_stdhandle(void)
      ((nullfd == (fd)) ? (keep = 1) : dup2(nullfd, fd)),	\
      (fd))
 
+    _fmode = _O_BINARY;
+
     if (fileno(stdin) < 0) {
 	stdin->_file = open_null(0);
     }
