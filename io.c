@@ -6386,8 +6386,7 @@ prep_io(int fd, int fmode, VALUE klass, const char *path)
 
     MakeOpenFile(io, fp);
     fp->fd = fd;
-//#ifdef __CYGWIN__
-#ifdef _WIN32
+#if defined(__CYGWIN__) || defined(_WIN32)
     if (!isatty(fd)) {
         fmode |= FMODE_BINMODE;
 	setmode(fd, O_BINARY);
