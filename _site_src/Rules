@@ -36,7 +36,7 @@ preprocess do
 end
 
 compile '/css/*/' do
-  # don't filter or layout
+  filter :erubis
 end
 
 # home page
@@ -49,9 +49,9 @@ end
 # individual post pages
 compile '/posts/*/' do
   filter :erubis
-  filter :redcarpet
   filter :colorize_syntax,
          :coderay => { :line_numbers => :table }
+  filter :redcarpet
   layout 'post'
   filter :erubis
   layout 'default'
@@ -68,7 +68,7 @@ compile '*' do
 end
 
 route '/css/*/' do
-  item.identifier.chop + '.' + item[:extension]
+  '%s.%s' % [ item.identifier.chop, item[:extension] ]
 end
 
 route '/posts/*/' do
@@ -83,10 +83,10 @@ end
 route '*' do
   if item.binary?
     # Write item with identifier /foo/ to /foo.ext
-    item.identifier.chop + '.' + item[:extension]
+    '%s.%s' % [ item.identifier.chop, item[:extension] ]
   else
     # Write item with identifier /foo/ to /foo/index.html
-    item.identifier + 'index.html'
+    '%s%s' % [ item.identifier, 'index.html' ]
   end
 end
 
