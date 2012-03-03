@@ -1,0 +1,24 @@
+---
+title: TCS-Ruby Blog
+---
+
+<div class="container">
+
+  <div id="post_badges">
+  <% @site.posts.each_with_index do |p,i| %>
+    <% if i % 2 == 0 %>
+    <div class="first grid9">
+    <% else %>
+    <div class="grid9">
+    <% end %>
+      <a href="<%= p.path %>">
+        <div class="post_badge">
+          <h1><%= p[:title] %></h2>
+          <h2><%= p[:subtitle] %></h2>
+        </div>
+      </a>
+    </div>
+  <% end %>
+  </div>
+
+</div>

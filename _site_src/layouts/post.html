@@ -1,0 +1,19 @@
+<div class="container">
+  <div id="single_post">
+    <h1 class="post_title"><%= @item[:title] %></h1>
+    <h3>by <%= @item[:author] %></h3>
+    <%= yield %>
+    <div class="post_date">Posted: <%= @item[:published] %>
+      <% if @item[:updated] %>
+        .:. Updated: <%= @item[:updated] %>
+      <% end %>
+    </div>
+    <div class="shares">
+      <!-- http://news.ycombinator.com/submitlink?u=http://thecodeshop.github.com<%= path_for(@item) %>&t=<%= @item[:title] %> -->
+      <a target="_blank" href="#">
+        <img title="Submit <%= @item[:title] %> to Hacker News" src="<%= path_for('/images/yc500.gif') %>">
+      </a>
+    </div>
+    <a class="home_link" href="<%= path_for('/') %>">&#171; Home</a>
+  </div>
+</div>

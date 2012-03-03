@@ -1,0 +1,93 @@
+#!/usr/bin/env ruby
+
+# A few helpful tips about the Rules file:
+#
+# * The string given to #compile and #route are matching patterns for
+#   identifiers--not for paths. Therefore, you can't match on extension.
+#
+# * The order of rules is important: for each item, only the first matching
+#   rule is applied.
+#
+# * Item identifiers start and end with a slash (e.g. "/about/" for the file
+#   "content/about.html"). To select all children, grandchildren, ... of an
+#   item, use the pattern "/about/*/"; "/about/*" will also select the parent,
+#   because "*" matches zero or more characters.
+
+preprocess do
+
+  # enrich Nanoc::Site
+  site.class.class_eval do
+    attr_accessor :posts
+  end
+
+  def remove_draft_items
+    items.delete_if { |i| i[:published] == false }
+  end
+
+  def sort_posts
+    site.posts = items.select { |i| i.identifier =~ /posts/ }.sort_by do |p|
+                    p[:published]
+                 end.reverse
+  end
+
+  # pre-processing tasks
+  remove_draft_items
+  sort_posts
+end
+
+compile '/css/*/' do
+  # don't filter or layout
+end
+
+# home page
+compile '/' do
+  filter :erubis
+  layout 'default'
+  filter :erubis
+end
+
+# individual post pages
+compile '/posts/*/' do
+  filter :erubis
+  filter :redcarpet
+  filter :colorize_syntax,
+         :coderay => { :line_numbers => :table }
+  layout 'post'
+  filter :erubis
+  layout 'default'
+  filter :erubis
+end
+
+compile '*' do
+  if item.binary?
+    # don't filter binary items
+  else
+    filter :erubis
+    layout 'default'
+  end
+end
+
+route '/css/*/' do
+  item.identifier.chop + '.' + item[:extension]
+end
+
+route '/posts/*/' do
+  # raw post format: /content/posts/<CCYY-MM-DD-title-summary.ext>
+  post = /([\w\-]+)\/\z/.match(item.identifier)
+  pub_date = /\A(\d{4})\-(\d{1,2})\-(\d{1,2})\-(.*)\z/.match(post[1])
+  slug = pub_date[4].downcase
+  # output format: /<year>/<month>/<day>/<title>/index.html
+  "/#{pub_date[1]}/#{pub_date[2]}/#{pub_date[3]}/#{slug}/index.html"
+end
+
+route '*' do
+  if item.binary?
+    # Write item with identifier /foo/ to /foo.ext
+    item.identifier.chop + '.' + item[:extension]
+  else
+    # Write item with identifier /foo/ to /foo/index.html
+    item.identifier + 'index.html'
+  end
+end
+
+layout '*', :erubis
