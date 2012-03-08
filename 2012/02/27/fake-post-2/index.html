@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Fake Post 2</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <link rel="alternate" href="/ruby/atom.xml" type="application/atom+xml" title="Sitewide ATOM Feed"  />
+
+  <link rel="stylesheet" href="/ruby/css/site.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/ruby/css/syntax.css" type="text/css" media="screen, projection" />
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+</head>
+<body>
+  <div id="logo">TCS Ruby - Multiplatform Performance Improvements</div>
+
+  <div class="container">
+  <div id="single_post">
+    <h1 class="post_title">Fake Post 2</h1>
+    <h3>by Remi LeRante</h3>
+    <p>Fake content</p>
+
+<pre><code class="language-c"><table class="CodeRay"><tr>
+<td class="line-numbers" title="double click to toggle" ondblclick="with (this.firstChild.style) { display = (display == '') ? 'none' : '' }"><pre><a href="#n1" name="n1">1</a>
+<a href="#n2" name="n2">2</a>
+<a href="#n3" name="n3">3</a>
+<a href="#n4" name="n4">4</a>
+<a href="#n5" name="n5">5</a>
+<a href="#n6" name="n6">6</a>
+<a href="#n7" name="n7">7</a>
+<a href="#n8" name="n8">8</a>
+<a href="#n9" name="n9">9</a>
+<strong><a href="#n10" name="n10">10</a></strong>
+<a href="#n11" name="n11">11</a>
+<a href="#n12" name="n12">12</a>
+<a href="#n13" name="n13">13</a>
+<a href="#n14" name="n14">14</a>
+<a href="#n15" name="n15">15</a>
+<a href="#n16" name="n16">16</a>
+<a href="#n17" name="n17">17</a>
+<a href="#n18" name="n18">18</a>
+<a href="#n19" name="n19">19</a>
+<strong><a href="#n20" name="n20">20</a></strong>
+<a href="#n21" name="n21">21</a>
+<a href="#n22" name="n22">22</a>
+<a href="#n23" name="n23">23</a>
+<a href="#n24" name="n24">24</a>
+<a href="#n25" name="n25">25</a>
+</pre></td>
+  <td class="code"><pre><span class="comment">/*
+ * build with:
+ *   gcc -Wall -Wstack-protector -fstack-protector -o buggy buggy.c
+ *
+ * see results with:
+ *   tail -2 /var/log/messages
+ */</span>
+
+<span class="preprocessor">#include</span> <span class="include">&lt;stdio.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="include">&lt;stdlib.h&gt;</span>
+<span class="preprocessor">#include</span> <span class="include">&lt;string.h&gt;</span>
+
+<span class="predefined-type">int</span> main(<span class="predefined-type">int</span> argc, <span class="predefined-type">char</span> *argv[])
+{
+    <span class="predefined-type">char</span> buffer[<span class="integer">10</span>];
+
+    <span class="comment">/* BAD - unbound string copy into the small stack buffer */</span>
+    strcpy(buffer, argv[<span class="integer">1</span>]);
+
+    printf(<span class="string"><span class="delimiter">"</span><span class="char">\t</span><span class="content">copied cmd line argument...</span><span class="char">\n</span><span class="delimiter">"</span></span>);
+
+    <span class="keyword">return</span> <span class="integer">0</span>;
+}
+
+<span class="comment">/* vim: set sw=4 sts=4 et */</span></pre></td>
+</tr></table></code></pre>
+
+    <div class="post_date">Posted: 2012-02-27 11:33:40 -0500
+    </div>
+    <div class="shares">
+      <!-- http://news.ycombinator.com/submitlink?u=http://thecodeshop.github.com/ruby/2012/02/27/fake-post-2/&t=Fake Post 2 -->
+      <a target="_blank" href="#">
+        <img title="Submit Fake Post 2 to Hacker News" src="/ruby/images/yc500.gif">
+      </a>
+    </div>
+    <a class="home_link" href="/ruby/">&#171; Home</a>
+  </div>
+</div>
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-19925645-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+</body>
+</html>

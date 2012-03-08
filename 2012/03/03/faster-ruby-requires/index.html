@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Faster Ruby Requires</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <link rel="alternate" href="/ruby/atom.xml" type="application/atom+xml" title="Sitewide ATOM Feed"  />
+
+  <link rel="stylesheet" href="/ruby/css/site.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/ruby/css/syntax.css" type="text/css" media="screen, projection" />
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+</head>
+<body>
+  <div id="logo">TCS Ruby - Multiplatform Performance Improvements</div>
+
+  <div class="container">
+  <div id="single_post">
+    <h1 class="post_title">Faster Ruby Requires</h1>
+    <h3>by Jon Maken</h3>
+    <p>Wouldn&#39;t it be great if Rails and other Ruby applications woke up faster and
+could do real work sooner? Wouldn&#39;t it be great if no changes were needed to
+your application code?</p>
+
+<p>Yura Sokolov a.k.a <a href="http://twitter.com/funny_falcon">@funny_falcon</a>, a TCS core
+committer, has been working to solve just that challenge by sorting <code>$LOADED_FEATURES</code>
+and caching <code>$LOAD_PATH</code>. While Yura&#39;s work is available in a number of different
+formats (<code>rvm</code> patch, git patch branches, <code>tcs-ruby_1_9_3</code> release branch) this
+post shows how to build a custom Ruby 1.9.3 enhanced with optimizations from our
+<code>sorted-lf/ruby_1_9_3</code> and <code>cached-lp/ruby_1_9_3</code> patch branches.</p>
+
+<h2>Building a Quicker Ruby 1.9.3</h2>
+
+<p><em>in progress</em></p>
+
+<h2>Performance Results</h2>
+
+<p><em>in progress</em></p>
+
+<h2>Next Steps</h2>
+
+<p>As you can see, the performance enhancements are noticeable and improve real-world
+Ruby applications. They even pass the current MRI test suite! While this post showed
+how you can benefit from these optimizations using the current Ruby 1.9.3, the patches
+have also been submitted for review by ruby-core:</p>
+
+<ul>
+<li><a href="http://bugs.ruby-lang.org/issues/5427">http://bugs.ruby-lang.org/issues/5427</a></li>
+<li><a href="http://bugs.ruby-lang.org/issues/5767">http://bugs.ruby-lang.org/issues/5767</a></li>
+</ul>
+
+<p>If you&#39;re jazzed about this post, take the next step. Build an enhanced Ruby and
+use it to run <em>your</em> application through <em>your</em> testing and performance gauntlet.
+If you find bugs, <a href="http://groups.google.com/group/thecodeshop">let us know</a>. If
+you like what you see, tweet about it. Blog about it. Be vocal and let others know.</p>
+
+<p>If you feel strongly that Yura&#39;s multi-platform <code>require</code> performance improvements
+makes MRI a better implementation, tell the busy, over-worked ruby-core committers
+by commenting on the above feature requests. Don&#39;t just give a meaningless <code>&quot;+1&quot;</code>
+throw away comment. Provide testing and performance results that clearly show
+the benefits to both the MRI implementation and Ruby users.</p>
+
+<h2>Acknowledgements</h2>
+
+<p><em>in progress</em></p>
+
+    <div class="post_date">Posted: 2012-03-03 13:05:32 -0500
+    </div>
+    <div class="shares">
+      <!-- http://news.ycombinator.com/submitlink?u=http://thecodeshop.github.com/ruby/2012/03/03/faster-ruby-requires/&t=Faster Ruby Requires -->
+      <a target="_blank" href="#">
+        <img title="Submit Faster Ruby Requires to Hacker News" src="/ruby/images/yc500.gif">
+      </a>
+    </div>
+    <a class="home_link" href="/ruby/">&#171; Home</a>
+  </div>
+</div>
+
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-19925645-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+</body>
+</html>
