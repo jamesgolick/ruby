@@ -2857,8 +2857,9 @@ rb_home_dir(const char *user, VALUE result)
     return result;
 }
 
-static VALUE
-file_expand_path(VALUE fname, VALUE dname, int abs_mode, VALUE result)
+#ifndef _WIN32
+VALUE
+rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE result)
 {
     const char *s, *b;
     char *buf, *p, *pend, *root;
@@ -2917,7 +2918,7 @@ file_expand_path(VALUE fname, VALUE dname, int abs_mode, VALUE result)
 	    /* specified drive, but not full path */
 	    int same = 0;
 	    if (!NIL_P(dname) && !not_same_drive(dname, s[0])) {
-		file_expand_path(dname, Qnil, abs_mode, result);
+		rb_file_expand_path_internal(dname, Qnil, abs_mode, result);
 		BUFINIT();
 		if (has_drive_letter(p) && TOLOWER(p[0]) == TOLOWER(s[0])) {
 		    /* ok, same drive */
@@ -2943,7 +2944,7 @@ file_expand_path(VALUE fname, VALUE dname, int abs_mode, VALUE result)
 #endif
     else if (!rb_is_absolute_path(s)) {
 	if (!NIL_P(dname)) {
-	    file_expand_path(dname, Qnil, abs_mode, result);
+	    rb_file_expand_path_internal(dname, Qnil, abs_mode, result);
 	    BUFINIT();
 	    rb_enc_associate(result, rb_enc_check(result, fname));
 	}
@@ -3173,6 +3174,7 @@ file_expand_path(VALUE fname, VALUE dname, int abs_mode, VALUE result)
     ENC_CODERANGE_CLEAR(result);
     return result;
 }
+#endif
 
 #define EXPAND_PATH_BUFFER() rb_usascii_str_new(0, MAXPATHLEN + 2)
 
@@ -3183,14 +3185,14 @@ file_expand_path(VALUE fname, VALUE dname, int abs_mode, VALUE result)
 static VALUE
 file_expand_path_1(VALUE fname)
 {
-    return file_expand_path(fname, Qnil, 0, EXPAND_PATH_BUFFER());
+    return rb_file_expand_path_internal(fname, Qnil, 0, EXPAND_PATH_BUFFER());
 }
 
 VALUE
 rb_file_expand_path(VALUE fname, VALUE dname)
 {
     check_expand_path_args(fname, dname);
-    return file_expand_path(fname, dname, 0, EXPAND_PATH_BUFFER());
+    return rb_file_expand_path_internal(fname, dname, 0, EXPAND_PATH_BUFFER());
 }
 
 /*
@@ -3227,7 +3229,7 @@ VALUE
 rb_file_absolute_path(VALUE fname, VALUE dname)
 {
     check_expand_path_args(fname, dname);
-    return file_expand_path(fname, dname, 1, EXPAND_PATH_BUFFER());
+    return rb_file_expand_path_internal(fname, dname, 1, EXPAND_PATH_BUFFER());
 }
 
 /*
@@ -5154,7 +5156,7 @@ rb_find_file_ext_safe(VALUE *filep, const char *const *ext, int safe_level)
 
 	    RB_GC_GUARD(str) = rb_get_path_check(str, safe_level);
 	    if (RSTRING_LEN(str) == 0) continue;
-	    file_expand_path(fname, str, 0, tmp);
+	    rb_file_expand_path_internal(fname, str, 0, tmp);
 	    if (rb_file_load_ok(RSTRING_PTR(tmp))) {
 		*filep = copy_path_class(tmp, *filep);
 		return (int)(j+1);
@@ -5214,7 +5216,7 @@ rb_find_file_safe(VALUE path, int safe_level)
 	    VALUE str = RARRAY_PTR(load_path)[i];
 	    RB_GC_GUARD(str) = rb_get_path_check(str, safe_level);
 	    if (RSTRING_LEN(str) > 0) {
-		file_expand_path(path, str, 0, tmp);
+		rb_file_expand_path_internal(path, str, 0, tmp);
 		f = RSTRING_PTR(tmp);
 		if (rb_file_load_ok(f)) goto found;
 	    }
@@ -5449,4 +5451,8 @@ Init_File(void)
     rb_define_method(rb_cStat, "setuid?",  rb_stat_suid, 0);
     rb_define_method(rb_cStat, "setgid?",  rb_stat_sgid, 0);
     rb_define_method(rb_cStat, "sticky?",  rb_stat_sticky, 0);
+
+#ifdef _WIN32
+    rb_w32_init_file();
+#endif
 }
