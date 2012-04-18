@@ -1,3 +1,7 @@
+Wed Apr 18 13:59:40 2012  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* win32/file.c (INVALID_FILE_ATTRIBUTES): define for old SDK.
+
 Thu Mar  1 15:40:05 2012  Nobuyoshi Nakada  <nobu@ruby-lang.org>
 
 	* win32/makedirs.bat: new command to make intermediate
