@@ -18,7 +18,7 @@ a:link,a:visited,a:hover {text-decoration:none;}
 .grid18 {width:710px;}
 .grid19 {width:750px;}
 
-#logo {width:100%;height:100px;font:2.2em 'Palatino Linotype',serif;font-weight:bold;line-height:2;color:#fff;border-bottom:2px solid #660000;background:#990000 url(/images/red_gradient_bkgnd.png) repeat-x;}
+#logo {width:100%;height:100px;font:2.2em 'Palatino Linotype',serif;font-weight:bold;line-height:2;color:#fff;border-bottom:2px solid #660000;background:#990000 url(<%= path_for('/images/red_gradient_bkgnd.png') %>) repeat-x;}
 
 .highlight {font-size:0.8em;background-color:#edeac6;overflow:auto;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;}
 .shell {font-family:Consolas,Monaco,monospace;font-size:0.8em;width:640px;color:#dd0;background-color:#000;margin:0 auto 1em auto;border:4px solid #99a;border-top:16px solid #99a;overflow:auto;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;}

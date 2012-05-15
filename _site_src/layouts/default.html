@@ -5,10 +5,10 @@
   <title><%= @item[:title] %></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-  <link rel="alternate" href="/atom.xml" type="application/atom+xml" title="Sitewide ATOM Feed"  />
+  <link rel="alternate" href="<%= path_for('/atom.xml') %>" type="application/atom+xml" title="Sitewide ATOM Feed"  />
 
-  <link rel="stylesheet" href="/css/site.css" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="/css/syntax.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="<%= path_for('/css/site.css') %>" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="<%= path_for('/css/syntax.css') %>" type="text/css" media="screen, projection" />
 
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 </head>

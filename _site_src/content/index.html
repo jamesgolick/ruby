@@ -11,7 +11,7 @@ title: TCS-Ruby Blog
     <% else %>
     <div class="grid9">
     <% end %>
-      <a href="<%= p.path %>">
+      <a href="<%= path_for(p) %>">
         <div class="post_badge">
           <h1><%= p[:title] %></h2>
           <h2><%= p[:subtitle] %></h2>
