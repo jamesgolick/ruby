@@ -22,9 +22,13 @@ But Nessie has surfaced, and it's time to see what all the fuss is about.
 **TODO** briefly summarize the following to properly set the stage for this
 long standing issue.
 
-1. [The Great Ruby Shootout](http://programmingzen.com/2010/07/19/the-great-ruby-shootout-july-2010/)
-2. [Performance bug with require implementation](http://bugs.ruby-lang.org/issues/3924)
-3. [Fenix rises](http://blog.mmediasys.com/2011/11/26/rubyconf-argentina-and-fenix/)
+1. Discovering useful tools: [API Monitor](http://www.rohitab.com/apimonitor),
+   [profiling MinGW apps](http://jonforums.github.com/cochise/2011/07/18/profiling-mingw-apps.html),
+   [cross platform API timing](https://github.com/jonforums/tma),
+   [Windows app timer](https://github.com/thecodeshop/w32time)
+2. [The Great Ruby Shootout](http://programmingzen.com/2010/07/19/the-great-ruby-shootout-july-2010/)
+3. [Performance bug with require implementation](http://bugs.ruby-lang.org/issues/3924)
+4. [Fenix rises](http://blog.mmediasys.com/2011/11/26/rubyconf-argentina-and-fenix/)
 
 ## Why is Ruby 1.9.3 startup time so slow on Windows?
 
