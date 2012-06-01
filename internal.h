@@ -102,6 +102,7 @@ VALUE rb_home_dir(const char *user, VALUE result);
 VALUE rb_realpath_internal(VALUE basedir, VALUE path, int strict);
 void rb_file_const(const char*, VALUE);
 int rb_file_load_ok(const char *);
+VALUE rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE result);
 void Init_File(void);
 
 /* gc.c */
