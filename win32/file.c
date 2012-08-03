@@ -109,15 +109,12 @@ home_dir(void)
 	    GetEnvironmentVariableW(L"USERPROFILE", buffer, buffer_len);
 	    break;
 	default:
-	    // wprintf(L"Failed to determine user home directory.\n");
 	    break;
     }
 
     if (home_env) {
 	/* sanitize backslashes with forwardslashes */
 	replace_wchar(buffer, L'\\', L'/');
-
-	// wprintf(L"home dir: '%s' using home_env (%i)\n", buffer, home_env);
 	return buffer;
     }
 
@@ -152,14 +149,12 @@ remove_invalid_alternative_data(wchar_t *wfullpath, size_t size) {
     if (size <= prime_len || _wcsnicmp(wfullpath + size - prime_len, prime, prime_len) != 0)
 	return size;
 
-    // wprintf(L"remove trailng ':$DATA': %s, %s\n", wfullpath, &wfullpath[size - prime_len]);
     /* alias of stream */
     /* get rid of a bug of x64 VC++ */
     if (wfullpath[size - (prime_len + 1)] == ':') {
 	/* remove trailing '::$DATA' */
 	size -= prime_len + 1; /* prime */
 	wfullpath[size] = L'\0';
-	// wprintf(L"removed trailng '::$DATA': %s\n", wfullpath);
     }
     else {
 	/* remove trailing ':$DATA' of paths like '/aa:a:$DATA' */
@@ -168,7 +163,6 @@ remove_invalid_alternative_data(wchar_t *wfullpath, size_t size) {
 	    if (*pos == L':') {
 		size -= prime_len; /* alternative */
 		wfullpath[size] = L'\0';
-		// wprintf(L"removed trailng ':$DATA': %s\n", wfullpath);
 		break;
 	    }
 	    pos--;
@@ -217,7 +211,6 @@ code_page(rb_encoding *enc)
 
     code_page_value = rb_hash_lookup(rb_code_page, name_key);
     if (code_page_value != Qnil) {
-	// printf("cached code page: %i\n", FIX2INT(code_page_value));
 	return (UINT)FIX2INT(code_page_value);
     }
 
@@ -281,7 +274,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	path_encoding = rb_enc_check(path, dir);
     }
     cp = path_cp = code_page(path_encoding);
-    // printf("code page: %i\n", path_cp);
 
     /* convert char * to wchar_t */
     if (path_cp == INVALID_CODE_PAGE) {
@@ -293,7 +285,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	}
     }
     path_to_wchar(path, &wpath, &wpath_pos, &wpath_len, cp);
-    // wprintf(L"wpath: '%s' with (%i) characters long.\n", wpath, wpath_len);
 
     /* determine if we need the user's home directory */
     /* expand '~' only if NOT rb_file_absolute_path() where `abs_mode` is 1 */
@@ -302,7 +293,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	/* tainted if expanding '~' */
 	tainted = 1;
 
-	// wprintf(L"wpath requires expansion.\n");
 	whome = home_dir();
 	if (whome == NULL) {
 	    free(wpath);
@@ -315,8 +305,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	    rb_raise(rb_eArgError, "non-absolute home");
 	}
 
-	// wprintf(L"whome: '%s' with (%i) characters long.\n", whome, whome_len);
-
 	/* ignores dir since we are expading home */
 	ignore_dir = 1;
 
@@ -326,7 +314,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 
 	/* exclude separator if present */
 	if (wpath_len && IS_DIR_SEPARATOR_P(wpath_pos[0])) {
-	    // wprintf(L"excluding expansion character and separator\n");
 	    wpath_pos++;
 	    wpath_len--;
 	}
@@ -334,7 +321,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
     else if (wpath_len >= 2 && wpath_pos[1] == L':') {
 	if (wpath_len >= 3 && IS_DIR_SEPARATOR_P(wpath_pos[2])) {
 	    /* ignore dir since path contains a drive letter and a root slash */
-	    // wprintf(L"Ignore dir since we have drive letter and root slash\n");
 	    ignore_dir = 1;
 	}
 	else {
@@ -384,7 +370,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	    rb_str_resize(tmp, 0);
 	}
 	path_to_wchar(dir, &wdir, NULL, &wdir_len, cp);
-	// wprintf(L"wdir: '%s' with (%i) characters long.\n", wdir, wdir_len);
 
 	if (wdir_len >= 2 && wdir[1] == L':') {
 	    dir_drive = wdir[0];
@@ -406,7 +391,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 		}
 		if (separators == 2)
 		    wdir_len = pos - 1;
-		// wprintf(L"UNC wdir: '%s' with (%i) characters.\n", wdir, wdir_len);
 	    }
 	}
     }
@@ -415,7 +399,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
     if (!ignore_dir && path_drive && dir_drive) {
 	if (towupper(path_drive) == towupper(dir_drive)) {
 	    /* exclude path drive letter to use dir */
-	    // wprintf(L"excluding path drive letter\n");
 	    wpath_pos += 2;
 	    wpath_len -= 2;
 	}
@@ -438,25 +421,18 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	wdir_len = 0;
     }
 
-    // wprintf(L"wpath_len: %i\n", wpath_len);
-    // wprintf(L"wdir_len: %i\n", wdir_len);
-    // wprintf(L"whome_len: %i\n", whome_len);
-
     buffer_len = wpath_len + 1 + wdir_len + 1 + whome_len + 1;
-    // wprintf(L"buffer_len: %i\n", buffer_len + 1);
 
     buffer = buffer_pos = (wchar_t *)malloc((buffer_len + 1) * sizeof(wchar_t));
 
     /* add home */
     if (whome_len) {
-	// wprintf(L"Copying whome...\n");
 	wcsncpy(buffer_pos, whome, whome_len);
 	buffer_pos += whome_len;
     }
 
     /* Add separator if required */
     if (whome_len && wcsrchr(L"\\/:", buffer_pos[-1]) == NULL) {
-	// wprintf(L"Adding separator after whome\n");
 	buffer_pos[0] = L'\\';
 	buffer_pos++;
     }
@@ -466,28 +442,24 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	if (!tainted && OBJ_TAINTED(dir))
 	    tainted = 1;
 
-	// wprintf(L"Copying wdir...\n");
 	wcsncpy(buffer_pos, wdir, wdir_len);
 	buffer_pos += wdir_len;
     }
 
     /* add separator if required */
     if (wdir_len && wcsrchr(L"\\/:", buffer_pos[-1]) == NULL) {
-	// wprintf(L"Adding separator after wdir\n");
 	buffer_pos[0] = L'\\';
 	buffer_pos++;
     }
 
     /* now deal with path */
     if (wpath_len) {
-	// wprintf(L"Copying wpath...\n");
 	wcsncpy(buffer_pos, wpath_pos, wpath_len);
 	buffer_pos += wpath_len;
     }
 
     /* GetFullPathNameW requires at least "." to determine current directory */
     if (wpath_len == 0) {
-	// wprintf(L"Adding '.' to buffer\n");
 	buffer_pos[0] = L'.';
 	buffer_pos++;
     }
@@ -499,8 +471,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
     if (!tainted && PathIsRelativeW(buffer) && !(buffer_len >= 2 && IS_DIR_UNC_P(buffer))) {
 	tainted = 1;
     }
-
-    // wprintf(L"buffer: '%s'\n", buffer);
 
     /* Determine require buffer size */
     size = GetFullPathNameW(buffer, PATH_BUFFER_SIZE, wfullpath_buffer, NULL);
@@ -514,22 +484,18 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 	else {
 	    wfullpath = wfullpath_buffer;
 	}
-	// wprintf(L"wfullpath: '%s'\n", wfullpath);
 
 
 	/* Remove any trailing slashes */
 	if (IS_DIR_SEPARATOR_P(wfullpath[size - 1]) &&
 		wfullpath[size - 2] != L':' &&
 		!(size == 2 && IS_DIR_UNC_P(wfullpath))) {
-	    // wprintf(L"Removing trailing slash\n");
 	    size -= 1;
 	    wfullpath[size] = L'\0';
 	}
-	// wprintf(L"wfullpath: '%s'\n", wfullpath);
 
 	/* Remove any trailing dot */
 	if (wfullpath[size - 1] == L'.') {
-	    // wprintf(L"Removing trailing dot\n");
 	    size -= 1;
 	    wfullpath[size] = L'\0';
 	}
@@ -539,7 +505,6 @@ rb_file_expand_path_internal(VALUE fname, VALUE dname, int abs_mode, VALUE resul
 
 	/* sanitize backslashes with forwardslashes */
 	replace_wchar(wfullpath, L'\\', L'/');
-	// wprintf(L"wfullpath: '%s'\n", wfullpath);
 
 	/* convert to char * */
 	wfullpath_size = size;
